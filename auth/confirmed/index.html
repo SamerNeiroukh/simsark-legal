@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>SIMSARK</title>
+<style>
+:root { --navy:#0C1B3B; --gold:#B8924A; --cream:#FAF7F2; --text:#1C2333; --muted:#5B6475; --line:#E4DED3; --ok:#2E7D5B; --bad:#A23B3B; }
+* { box-sizing:border-box; }
+body { margin:0; background:var(--cream); color:var(--text);
+  font:16px/1.6 -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, "Noto Sans Arabic", "Noto Sans Hebrew", sans-serif; }
+header { background:var(--navy); color:#fff; padding:16px; text-align:center; font-weight:800; letter-spacing:3px; }
+main { max-width:520px; margin:24px auto; padding:0 16px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:14px; padding:24px; text-align:center; }
+.icon { font-size:48px; line-height:1; margin-bottom:8px; }
+.ok .icon { color:var(--ok); } .bad .icon { color:var(--bad); }
+h1 { font-size:20px; margin:12px 0 4px; color:var(--navy); }
+p { margin:0 0 12px; color:var(--muted); }
+hr { border:0; border-top:1px solid var(--line); margin:16px 0; }
+.btn { display:inline-block; margin-top:8px; background:var(--navy); color:#fff; text-decoration:none; font-weight:700; padding:14px 24px; border-radius:10px; }
+.hint { font-size:13px; margin-top:12px; }
+[hidden] { display:none !important; }
+</style>
+</head>
+<body>
+<header>SIMSARK · سمسارك</header>
+<main>
+  <div class="card ok" id="ok">
+    <div class="icon">&#10003;</div>
+    <h1 dir="rtl">تم تأكيد بريدك الإلكتروني</h1>
+    <p dir="rtl">ارجع إلى تطبيق سمسارك وسجّل الدخول.</p>
+    <hr>
+    <h1 dir="rtl">האימייל שלכם אומת</h1>
+    <p dir="rtl">חזרו לאפליקציית SIMSARK והתחברו.</p>
+    <hr>
+    <h1 dir="ltr">Your email is confirmed</h1>
+    <p dir="ltr">Go back to the SIMSARK app and sign in.</p>
+    <a class="btn" id="open" href="com.simsark.app://login-callback" hidden>فتح سمسارك · פתיחת SIMSARK · Open SIMSARK</a>
+  </div>
+  <div class="card bad" id="bad" hidden>
+    <div class="icon">!</div>
+    <h1 dir="rtl">انتهت صلاحية هذا الرابط أو تم استخدامه</h1>
+    <p dir="rtl">إذا كان بريدك مؤكداً من قبل، سجّل الدخول في التطبيق. وإلا، اطلب رسالة تأكيد جديدة من التطبيق.</p>
+    <hr>
+    <h1 dir="rtl">הקישור פג תוקף או שכבר נעשה בו שימוש</h1>
+    <p dir="rtl">אם האימייל כבר אומת, התחברו באפליקציה. אחרת, בקשו הודעת אימות חדשה מהאפליקציה.</p>
+    <hr>
+    <h1 dir="ltr">This link has expired or was already used</h1>
+    <p dir="ltr">If your email is already confirmed, just sign in in the app. Otherwise, ask the app for a new confirmation email.</p>
+  </div>
+  <p class="hint" dir="ltr"><a href="../../en/support/">Help &amp; support</a> · simsark.support@gmail.com</p>
+</main>
+<script>
+(function () {
+  var query = new URLSearchParams(location.search);
+  var hash = new URLSearchParams(location.hash.replace(/^#/, ''));
+  var failed = query.get('error') || hash.get('error') ||
+               query.get('error_code') || hash.get('error_code');
+  if (failed) {
+    document.getElementById('ok').hidden = true;
+    document.getElementById('bad').hidden = false;
+    return;
+  }
+  // On a phone, offer to hand the sign-in code to the app. It completes the
+  // sign-in only on the device that created the account; elsewhere the app
+  // simply opens and the user signs in.
+  if (/iPhone|iPad|Android/i.test(navigator.userAgent)) {
+    var open = document.getElementById('open');
+    open.href = 'com.simsark.app://login-callback' + location.search + location.hash;
+    open.hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
